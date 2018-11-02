@@ -43,7 +43,7 @@ class App extends Component {
           active: false
         } 
       ],
-      numlist : [1,1,1,1]//,5,6,7,8,9]
+      numlist : [1,2,3,7]//,5,6,7,8,9]
     }
   }
 
@@ -61,8 +61,17 @@ class App extends Component {
     return add1thenDouble(num);
   }
 
+  returningPromise = (num) =>{
+    console.log("In returningPromise(), receiving num : " + num);
+    return new Promise((resolve,reject)=>{
+      num > 0 ? resolve(num*num) : reject(new Error ("Number is less than 1"));
+    });
+  }
+
   chainingPromisesTest = () => {
-    
+    this.state.numlist.reduce((promise, num) => {
+    return promise.then(_ => this.returningPromise(num));
+    }, Promise.resolve())
   }
   render() {
     return (
@@ -102,8 +111,9 @@ class App extends Component {
         <h2>Chaining Promises</h2>
         <div>
           {
-            this.chainingPromisesTest()
+            console.log(this.chainingPromisesTest())
           }
+          <p>Check the Console for Output.</p>
         </div>
 
 
