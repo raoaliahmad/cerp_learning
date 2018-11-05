@@ -43,8 +43,23 @@ class App extends Component {
           active: false
         } 
       ],
-      numlist : [1,2,3,7]//,5,6,7,8,9]
+      numlist : [1,2,3,7],    //,5,6,7,8,9]
+      data : []
     }
+  }
+  
+  async componentDidMount(){
+    try{
+      const response = await fetch(`https://api.coinmarketcap.com/v1/ticker/?limit=10`);
+      if(!response.ok){
+        throw Error (response.statusText);
+      }
+      const json = await response.json();
+      this.setState({ data: json });
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
 
@@ -115,7 +130,15 @@ class App extends Component {
           }
           <p>Check the Console for Output.</p>
         </div>
-
+        <h2>Async\Await</h2>
+        <p>Following data is coming from <a href="https://api.coinmarketcap.com/v1/ticker/?limit=10">this</a> API </p>
+        <div>
+            {
+              this.state.data.map(el => (
+                <li>{el.name}: {el.price_usd}</li>
+              ))
+            }
+        </div>
 
 
       </div>
